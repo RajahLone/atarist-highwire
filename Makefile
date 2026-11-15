@@ -13,6 +13,8 @@ BUILDDIR = build
 
 RELEASEDIR = releases
 
+DECODERS_EXT = gif ico jpg png xbm bmp #svg
+
 # compiler settings
 
 CROSSPATH=/opt/cross-mint/bin/
@@ -252,44 +254,20 @@ all::
 	$(MAKE) -C modules/network.src CPU=5475 sting
 	mv modules/network.src/network.ldg $(DISTDIR_V4E)/modules/sting.ldg
 
-	$(MAKE) -C modules/decoder.src CPU=68000 img_gif
-	mv modules/decoder.src/imgd-gif.ldg $(DISTDIR_68K)/modules/imgd-gif.ldg
-	$(MAKE) -C modules/decoder.src CPU=68000 img_ico
-	mv modules/decoder.src/imgd-ico.ldg $(DISTDIR_68K)/modules/imgd-ico.ldg
-	$(MAKE) -C modules/decoder.src CPU=68000 img_jpg
-	mv modules/decoder.src/imgd-jpg.ldg $(DISTDIR_68K)/modules/imgd-jpg.ldg
-	$(MAKE) -C modules/decoder.src CPU=68000 img_png
-	mv modules/decoder.src/imgd-png.ldg $(DISTDIR_68K)/modules/imgd-png.ldg
-	$(MAKE) -C modules/decoder.src CPU=68000 img_xbm
-	mv modules/decoder.src/imgd-xbm.ldg $(DISTDIR_68K)/modules/imgd-xbm.ldg
-	$(MAKE) -C modules/decoder.src CPU=68000 img_bmp
-	mv modules/decoder.src/imgd-bmp.ldg $(DISTDIR_68K)/modules/imgd-bmp.ldg
+	for ext in $(DECODERS_EXT); do \
+		$(MAKE) -C modules/decoder.src CPU=68000 img_$$ext; \
+		mv modules/decoder.src/imgd-$$ext.ldg $(DISTDIR_68K)/modules/imgd-$$ext.ldg; \
+	done
 
-	$(MAKE) -C modules/decoder.src CPU=68020-60 img_gif
-	mv modules/decoder.src/imgd-gif.ldg $(DISTDIR_020)/modules/imgd-gif.ldg
-	$(MAKE) -C modules/decoder.src CPU=68020-60 img_ico
-	mv modules/decoder.src/imgd-ico.ldg $(DISTDIR_020)/modules/imgd-ico.ldg
-	$(MAKE) -C modules/decoder.src CPU=68020-60 img_jpg
-	mv modules/decoder.src/imgd-jpg.ldg $(DISTDIR_020)/modules/imgd-jpg.ldg
-	$(MAKE) -C modules/decoder.src CPU=68020-60 img_png
-	mv modules/decoder.src/imgd-png.ldg $(DISTDIR_020)/modules/imgd-png.ldg
-	$(MAKE) -C modules/decoder.src CPU=68020-60 img_xbm
-	mv modules/decoder.src/imgd-xbm.ldg $(DISTDIR_020)/modules/imgd-xbm.ldg
-	$(MAKE) -C modules/decoder.src CPU=68020-60 img_bmp
-	mv modules/decoder.src/imgd-bmp.ldg $(DISTDIR_020)/modules/imgd-bmp.ldg
+	for ext in $(DECODERS_EXT); do \
+		$(MAKE) -C modules/decoder.src CPU=68020-60 img_$$ext; \
+		mv modules/decoder.src/imgd-$$ext.ldg $(DISTDIR_020)/modules/imgd-$$ext.ldg; \
+	done
 
-	$(MAKE) -C modules/decoder.src CPU=5475 img_gif
-	mv modules/decoder.src/imgd-gif.ldg $(DISTDIR_V4E)/modules/imgd-gif.ldg
-	$(MAKE) -C modules/decoder.src CPU=5475 img_ico
-	mv modules/decoder.src/imgd-ico.ldg $(DISTDIR_V4E)/modules/imgd-ico.ldg
-	$(MAKE) -C modules/decoder.src CPU=5475 img_jpg
-	mv modules/decoder.src/imgd-jpg.ldg $(DISTDIR_V4E)/modules/imgd-jpg.ldg
-	$(MAKE) -C modules/decoder.src CPU=5475 img_png
-	mv modules/decoder.src/imgd-png.ldg $(DISTDIR_V4E)/modules/imgd-png.ldg
-	$(MAKE) -C modules/decoder.src CPU=5475 img_xbm
-	mv modules/decoder.src/imgd-xbm.ldg $(DISTDIR_V4E)/modules/imgd-xbm.ldg
-	$(MAKE) -C modules/decoder.src CPU=5475 img_bmp
-	mv modules/decoder.src/imgd-bmp.ldg $(DISTDIR_V4E)/modules/imgd-bmp.ldg
+	for ext in $(DECODERS_EXT); do \
+		$(MAKE) -C modules/decoder.src CPU=5475 img_$$ext; \
+		mv modules/decoder.src/imgd-$$ext.ldg $(DISTDIR_V4E)/modules/imgd-$$ext.ldg; \
+	done
 
 	mkdir -p $(RELEASEDIR)
 	(cwd=`pwd`; cd $(DISTDIR_68K); zip -r "$$cwd"/$(RELEASEDIR)/highwire-`date +%Y%m%d`-68k.zip . -x "*/.DS_Store" -x "__MACOSX")
