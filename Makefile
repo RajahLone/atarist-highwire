@@ -45,10 +45,21 @@ WARN = \
 	$(DISABLED_WARNINGS) \
 	-Werror \
 
-CFLAGS = $(WARN) $(OPTS) $(DEFS)
+CMINI=lib/libcmini/lib
+CPUDIR=
+
+ifeq ($(CPU),5475)
+	CPUDIR = /m5475
+else
+	ifeq ($(CPU),68020-60)
+		CPUDIR = /m68020-60
+	endif
+endif
+
+CFLAGS = -Ilib/ldg/include -Ilib/libcmini/include $(WARN) $(OPTS) $(DEFS)
 ASFLAGS = $(OPTS)
-LDFLAGS = -s
-LIBS = -lgem -lcflib -liio -lldg
+LDFLAGS = -s -nostdlib $(CMINI)/crt0.o
+LIBS = -L$(CMINI)$(CPUDIR) -L../../lib/ldg/lib.gcc$(CPUDIR) -lgem -lcflib -liiomini -lldg -lcmini -lgcc -lcmini
 
 ifeq ($(CPU),5475)
   OBJDIR = $(BUILDDIR)/obj.$(CPU)

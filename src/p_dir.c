@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#ifdef __PUREC__
-# include <ext.h>
-#endif
+//#ifdef __PUREC__
+#include <ext.h>
+#include <mint/osbind.h>
+//#endif
 
 #include "file_sys.h"
 #include "global.h"

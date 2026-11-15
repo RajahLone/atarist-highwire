@@ -5,28 +5,29 @@
 #include "hw-types.h"
 
 
-#if defined (__PUREC__)
-# include <tos.h>
+//#if defined (__PUREC__)
+# include <unistd.h>
+# include <mint/mintbind.h>
 
 # define F_xattr(f,n,a)          Fxattr    (f, n, a)
 # define D_xreaddir(s,d,b,x,r)   Dxreaddir (s, d, b, x, r)
 
-#elif defined (LATTICE)
-# include <dos.h>
-# include <mintbind.h>
-# define DTA      struct FILEINFO
-# define d_attrib attr
-# define d_length size
-# define d_time   time
-# define d_fname  name
+//#elif defined (LATTICE)
+//# include <dos.h>
+//# include <mintbind.h>
+//# define DTA      struct FILEINFO
+//# define d_attrib attr
+//# define d_length size
+//# define d_time   time
+//# define d_fname  name
 
-# include <fcntl.h>
-# define F_xattr(f,n,a)          Fxattr (f, (char*)n, a)
-# define D_xreaddir(s,d,b,x,r)   Dxreaddir (s, d, b, (long*)x, r)
+//# include <fcntl.h>
+//# define F_xattr(f,n,a)          Fxattr (f, (char*)n, a)
+//# define D_xreaddir(s,d,b,x,r)   Dxreaddir (s, d, b, (long*)x, r)
 
-#elif defined (__GNUC__)
-# include <unistd.h>
-# include <mintbind.h>
+//#elif defined (__GNUC__)
+//# include <unistd.h>
+//# include <mintbind.h>
 # define DTA      _DTA
 # define d_attrib dta_attribute
 # define d_length dta_size
@@ -34,10 +35,10 @@
 # define d_date   dta_date
 # define d_fname  dta_name
 
-# include <fcntl.h>
-# define F_xattr(f,n,a)          Fxattr (f, n, a)
-# define D_xreaddir(s,d,b,x,r)   Dxreaddir (s, d, b, x, r)
-#endif
+//# include <fcntl.h>
+//# define F_xattr(f,n,a)          Fxattr (f, n, a)
+//# define D_xreaddir(s,d,b,x,r)   Dxreaddir (s, d, b, x, r)
+//#endif
 
 #ifndef O_RAW    /* Lattice uses this for open() to write binary files */
 # define O_RAW 0

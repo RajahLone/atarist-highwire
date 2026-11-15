@@ -1,10 +1,10 @@
 some ideas to work on:
-- new tries to compile HW core with libcmini (issues
-  were with cache saving, Dopendir, stat conflict, etc).
+- continue tests on HighWire's core libcminied
+  (survey or replace faulty strtoul function?).
 - HYP documentation (at least for keys shortcuts).
 - remove PureC and LatticeC parts?
 - favicon.ico for bookmarks?
-- add SVG decoder (candidate: PlutoVG+PlutoSVG).
+- add SVG decoder.
 - crash with bullet <ul><li/></ul> and Life speedo font.
 - animated gif (and png?) like in CAB, that can be disabled?
 - if animation display is achieved, next on webp?
@@ -13,6 +13,8 @@ some ideas to work on:
 
 Acheived for next release:
 
+  - HighWire's' core uses libcmini instead of MiNTlib, reducing
+    drastically program size.
   - ICO decoder updated and using NetSurf's libnsbmp.
   - BMP decoder added thanks to NetSurf's libnsbmp.
 

@@ -650,7 +650,9 @@ chunked_job (void * arg, long invalidated)
 
 			if (data) {
 				*(data++) = '\0';
-				if ((long)(size = strtoul (loader->rdTemp, NULL, 16)) <= 0) {
+        char *tmp_ptr = loader->rdTemp;
+        while ((*tmp_ptr == '\n') || (*tmp_ptr == '\r')) { tmp_ptr++; } // libcmini's strtoul don't seem to like CR/LF at string start
+				if ((long)(size = strtoul (tmp_ptr, NULL, 16)) <= 0) {
 					loader->rdTlen = 0; /* end of chunks */
 				} else {				
 					loader->rdTlen -= data - loader->rdTemp;

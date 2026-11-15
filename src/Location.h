@@ -63,7 +63,7 @@ const char * location_DBhost   (const char *, UWORD len, ULONG * flags);
 const char * location_DBpath   (const char *, UWORD len, ULONG * flags);
 
 /*--- save and load for cache ---*/
-#if defined(_STDIO_H) || defined(__STDIO)
+#if defined(_STDIO_H) || defined(__STDIO) || defined(_STDIO_H_)
 BOOL     location_wrIdx (FILE *, LOCATION);
 LOCATION location_rdIdx (FILE *);
 #endif /* <stdio.h> */

@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <wctype.h>
+//#include <wctype.h>
 
 #ifndef __PUREC__
 #  include <osbind.h>
@@ -136,10 +136,10 @@ static void    del_chars (INPUT input, WORD col, WORD row, int numChars);
 #define        edit_space(inp)       ((WCHAR*)&__edit_r_0(inp)-__edit_r_r(inp))
 
 /*------------------------------------------------------------------------------*/
-#ifdef __PUREC__
-int iswspace(wint_t wc)
+//#ifdef __PUREC__
+BOOL my_iswspace(WCHAR wc)
 {
-	static const wchar_t spaces[] = {
+	static const WCHAR spaces[] = {
 		' ', '\t', '\n', '\r', 11, 12,  0x0085,
 		0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005,
 		0x2006, 0x2008, 0x2009, 0x200a,
@@ -152,7 +152,7 @@ int iswspace(wint_t wc)
 			return 1;
 	return 0;
 }
-#endif
+//#endif
 
 /*------------------------------------------------------------------------------
  * Memo: UTF-8 ranges
@@ -2594,7 +2594,7 @@ ctrl_left (WCHAR * beg, WCHAR * end)
 
 	/* Ignore the leading spaces to the left of the cursor */
 	while (beg < end
-	       && iswspace(*(end-1)) )
+	       && my_iswspace(*(end-1)) )
 	{
 		end--;
 		numChars++;
@@ -2602,7 +2602,7 @@ ctrl_left (WCHAR * beg, WCHAR * end)
 
 	/* Find the next space to the left of the cursor or word */
 	while (beg < end
-	       &&  ! iswspace(*(end-1)) )
+	       &&  ! my_iswspace(*(end-1)) )
 	{
 		end--;
 		numChars++;
@@ -2618,7 +2618,7 @@ ctrl_right (WCHAR * beg, WCHAR * end)
 
 	/* ignore the leading spaces to the right of the cursr */
 	while (beg < end
-	       &&   iswspace(*beg) )
+	       &&   my_iswspace(*beg) )
 	{
 		beg++;
 		numChars++;
@@ -2626,7 +2626,7 @@ ctrl_right (WCHAR * beg, WCHAR * end)
 
 	/* Find the next space to the right of the cursor or word */
 	while (beg < end
-	       &&  (! iswspace(*beg)) )
+	       &&  (! my_iswspace(*beg)) )
 	{
 		beg++;
 		numChars++;

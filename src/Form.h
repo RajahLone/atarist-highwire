@@ -1,6 +1,7 @@
 #ifndef __FORM_H__
 #define __FORM_H__
 
+BOOL my_iswspace(WCHAR wc);
 
 void * new_form     (FRAME, char * target, char * action, const char * method, char *enctype);
 void   form_finish  (TEXTBUFF);

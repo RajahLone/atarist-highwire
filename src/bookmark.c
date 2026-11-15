@@ -7,14 +7,14 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h> /* isspace() */
-#if defined (__PUREC__)
+//#if defined (__PUREC__)
 # include <ext.h>
-#else
-# include <sys/stat.h>
-# ifdef __GNUC__
-#  include <unistd.h>
-# endif
-#endif
+//#else
+//# include <sys/stat.h>
+//# ifdef __GNUC__
+//#  include <unistd.h>
+//# endif
+//#endif
 
 #include "global.h"
 #include "Logging.h"
