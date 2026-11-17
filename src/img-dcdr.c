@@ -14,7 +14,8 @@
 DECODER _decoder_xbm = { NULL, { MIME_IMG_X_XBM, MIME_IMG_X_XPM, 0 }, "xbm", NULL, NULL, NULL, NULL };
 DECODER _decoder_bmp = { &_decoder_xbm, { MIME_IMG_X_BMP, 0 }, "bmp", NULL, NULL, NULL, NULL };
 DECODER _decoder_ico = { &_decoder_bmp, { MIME_IMG_X_ICON, 0 }, "ico", NULL, NULL, NULL, NULL };
-DECODER _decoder_jpg = { &_decoder_ico, { MIME_IMG_JPEG, 0 }, "jpg", NULL, NULL, NULL, NULL };
+DECODER _decoder_svg = { &_decoder_ico, { MIME_IMG_SVG, MIME_IMG_SVG_X1, MIME_IMG_SVG_X2, 0 }, "svg", NULL, NULL, NULL, NULL };
+DECODER _decoder_jpg = { &_decoder_svg, { MIME_IMG_JPEG, 0 }, "jpg", NULL, NULL, NULL, NULL };
 DECODER _decoder_png = { &_decoder_jpg, { MIME_IMG_PNG, 0 }, "png", NULL, NULL, NULL, NULL };
 DECODER _decoder_gif = { &_decoder_png, { MIME_IMG_GIF, 0 }, "gif", NULL, NULL, NULL, NULL };
  
@@ -64,7 +65,7 @@ IMGINFO get_decoder (const char * file, UWORD want_w, UWORD want_h)
           }
           if (found->libimg)
           {
-            if ((found == &_decoder_png) || (found == &_decoder_bmp) || (found == &_decoder_ico))
+            if ((found == &_decoder_png) || (found == &_decoder_bmp) || (found == &_decoder_ico) || (found == &_decoder_svg))
             {
               found->set = ldg_find("hw_set_fast", found->libimg);
               if (found->set) { (*found->set)(cfg_FastImages); }
@@ -94,7 +95,7 @@ IMGINFO get_decoder (const char * file, UWORD want_w, UWORD want_h)
           }
           if (decoder->libimg)
           {
-            if ((decoder == &_decoder_png) || (found == &_decoder_bmp) || (found == &_decoder_ico))
+            if ((decoder == &_decoder_png) || (found == &_decoder_bmp) || (found == &_decoder_ico) || (found == &_decoder_svg))
             {
               decoder->set = ldg_find("hw_set_fast", decoder->libimg);
               if (decoder->set) { (*decoder->set)(cfg_FastImages); }

@@ -13,7 +13,7 @@ BUILDDIR = build
 
 RELEASEDIR = releases
 
-DECODERS_EXT = gif ico jpg png xbm bmp #svg
+DECODERS_EXT = gif ico jpg png xbm bmp svg
 
 # compiler settings
 
@@ -209,6 +209,7 @@ all::
 	cp -a lib/libpng/LICENSE $(DISTDIR_68K)/doc/licenses/libpng.txt
 	cp -a lib/jpeg/README $(DISTDIR_68K)/doc/licenses/libjpeg.txt
 	cp -a lib/libnsbmp/COPYING $(DISTDIR_68K)/doc/licenses/libnsbmp.txt
+	cp -a lib/plutosvg/LICENSE $(DISTDIR_68K)/doc/licenses/plutosvg.txt
 	cp -a LICENSE $(DISTDIR_68K)/doc/licenses/highwire.txt
 	
 	mkdir -p $(DISTDIR_68K)/html

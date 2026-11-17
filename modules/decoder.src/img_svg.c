@@ -4,101 +4,60 @@
 #include <string.h>
 
 #include <ldg.h>
+#include <ctype.h>
 
 #include "../../src/global.h"
 #include "../../src/img-dcdr.h"
 
-#include <libnsbmp.h>
-
-#define BYTES_PER_PIXEL sizeof(ULONG)
-#define TRANSPARENT_COLOR 0xffffffff
-
+#include <plutosvg.h>
 
 BOOL local_FastImages = FALSE;
 
 void (*local_errprintf)(const char *s, ...);
 
-static void *bitmap_create(int width, int height, unsigned int state);
-static unsigned char *bitmap_get_buffer(void *bitmap);
-static void bitmap_destroy(void *bitmap);
-
-BOOL CDECL decBmp_start (IMGINFO info, void * errfunc);
+BOOL CDECL decSvg_start (IMGINFO info, void * errfunc);
 void CDECL blend_row (IMGINFO info, CHAR * row);
-BOOL CDECL decBmp_read (IMGINFO info, CHAR * buffer);
-void CDECL decBmp_quit (IMGINFO info);
-const char* CDECL decBmp_info(void);
-void CDECL decBmp_setFastImage(BOOL set_FastImages);
+BOOL CDECL decSvg_read (IMGINFO info, CHAR * buffer);
+void CDECL decSvg_quit (IMGINFO info);
+const char* CDECL decSvg_info(void);
+void CDECL decSvg_setFastImage(BOOL set_FastImages);
 
-
-/*----------------------------------------------------------------------------*/
-
-static void *bitmap_create(int width, int height, unsigned int state)
-{
-  (void) state;
-	/* Ensure a stupidly large bitmap is not created */
-	if (width > 4096 || height > 4096) { return NULL; }
-  
-  return (void *)ldg_Calloc(width * height, BYTES_PER_PIXEL);
-}
-
-static unsigned char *bitmap_get_buffer(void *bitmap) { if (bitmap) { return (unsigned char *)bitmap; } return NULL; }
-
-static void bitmap_destroy(void *bitmap) { if (bitmap) { ldg_Free(bitmap); } }
-
-static void warning(const char *context, bmp_result code)
-{
-  switch (code)
-  {
-    case BMP_INSUFFICIENT_MEMORY: local_errprintf("%s failed: BMP_INSUFFICIENT_MEMORY\n", context); break;
-    case BMP_INSUFFICIENT_DATA:   local_errprintf("%s failed: BMP_INSUFFICIENT_DATA\n", context); break;
-    case BMP_DATA_ERROR:          local_errprintf("%s failed: BMP_DATA_ERROR\n", context); break;
-    default:                      local_errprintf("%s failed: BMP unknown code %i\n", context, code);
-  }
-}
-
-static bmp_bitmap_callback_vt bitmap_callbacks = { bitmap_create, bitmap_destroy, bitmap_get_buffer };
-
-static UWORD bmp_line_read;
+static UWORD svg_line_read;
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decBmp_start (IMGINFO info, void * errfunc)
+BOOL CDECL decSvg_start (IMGINFO info, void * errfunc)
 {
-	BOOL       res  = TRUE;
-  bmp_result code = BMP_OK;
-  
-  bmp_line_read = 0;
-  
+	BOOL                 res      = TRUE;
+  plutosvg_document_t* document = NULL;
+  plutovg_surface_t*   surface  = NULL;
+  const char*          id       = NULL;
+
+  svg_line_read  = 0;
+
   local_errprintf = errfunc;
  
-  struct bmp_image *bmp = (struct bmp_image *)ldg_Malloc (sizeof(struct bmp_image));
- 
-  if (bmp == NULL) { warning("bmp_image_alloc", BMP_INSUFFICIENT_MEMORY); res = FALSE; goto cleanup; }
+  document = plutosvg_document_load_from_data((const char *)info->_priv_load, info->_priv_size, -1, -1, NULL, NULL);
+    
+  if (document == NULL) { local_errprintf("decSvg_start(): could not instanciate document from datas\n"); res = FALSE; goto cleanup; }
 
-  bmp_create(bmp, &bitmap_callbacks);
-
-  code = bmp_analyse(bmp, (size_t)info->_priv_size, info->_priv_load);
-  if (code != BMP_OK) { warning("bmp_analyse", code); res = FALSE; goto cleanup; }
-
-  code = bmp_decode(bmp);
-  //code = bmp_decode_trans(bmp, TRANSPARENT_COLOR);
-
-  if (code != BMP_OK)
-  {
-    warning("bmp_decode", code);
-    /* allow partially decoded images */
-    if ((code != BMP_INSUFFICIENT_DATA) && (code != BMP_DATA_ERROR)) { res = FALSE; goto cleanup; }
-  }
-
-#ifdef BMP_DBG
-  local_errprintf("bmp size: %d x %d px\n", bmp->width, bmp->height);
+#ifdef SVG_DBG
+  local_errprintf("svg_document size: %d x %d px\n", (int)plutosvg_document_get_width(document), (int)plutosvg_document_get_height(document));
 #endif
 
-	info->_priv_data = bmp;
-  //info->_priv_more = NULL;
-	info->read       = decBmp_read;
-	info->quit       = decBmp_quit;
-	info->ImgWidth   = bmp->width;
-	info->ImgHeight  = bmp->height;
+  surface = plutosvg_document_render_to_surface(document, id, -1, -1, NULL, NULL, NULL);
+
+  if (surface == NULL) { local_errprintf("decSvg_start(): could not render to surface\n"); res = FALSE; goto cleanup; }
+
+#ifdef SVG_DBG
+  local_errprintf("svg_surface size: %d x %d px\n", plutovg_surface_get_width(surface), plutovg_surface_get_height(surface));
+#endif
+
+	info->_priv_data = surface;
+  info->_priv_more = document;
+	info->read       = decSvg_read;
+	info->quit       = decSvg_quit;
+	info->ImgWidth   = plutovg_surface_get_width(surface);
+	info->ImgHeight  = plutovg_surface_get_height(surface);
 	info->BitDepth   = 8;
   info->NumComps   = 3;
   info->NumColors  = 0;
@@ -114,9 +73,10 @@ BOOL CDECL decBmp_start (IMGINFO info, void * errfunc)
 cleanup:
   if (!res)
   {
-    if (bmp) { bmp_finalise(bmp); ldg_Free (bmp); }
+    if (surface)  { plutovg_surface_destroy(surface); }
+    if (document) { plutosvg_document_destroy(document); }
   }
- 
+
   return res;
 }
 
@@ -160,56 +120,58 @@ void blend_row (IMGINFO info, CHAR * row)
 }
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decBmp_read (IMGINFO info, CHAR * buffer)
+BOOL CDECL decSvg_read (IMGINFO info, CHAR * buffer)
 {
-  bmp_image *bmp = (bmp_image *)info->_priv_data;
+  plutovg_surface_t *surface = (plutovg_surface_t *)info->_priv_data;
   
-  if (!bmp) { return FALSE; }
-  if (bmp_line_read >= bmp->height) { return FALSE; }
-  if (!bmp->decoded) { return FALSE; }
+  if (!surface) { return FALSE; }
+  if (svg_line_read >= info->ImgHeight) { return FALSE; }
 
-  CHAR *ptr = (CHAR *)bmp->bitmap;
-
-  ptr += (bmp_line_read * bmp->width) * BYTES_PER_PIXEL;
-
-  memcpy(buffer, (const void *)ptr, (size_t)(bmp->width * BYTES_PER_PIXEL));
+  CHAR *ptr = plutovg_surface_get_data(surface);
+  int   len = plutovg_surface_get_stride(surface);
+  int width = plutovg_surface_get_width(surface);
   
-  bmp_line_read++;
+  ptr += (svg_line_read * len);
+
+  plutovg_convert_argb_to_rgba(buffer, ptr, width, 1, len);
+  
+  svg_line_read++;
 
 	if (info->Alpha) { blend_row (info, buffer); }
 
-  return (bmp_line_read < bmp->height);
+  return (svg_line_read < info->ImgHeight);
 }
 
 /*----------------------------------------------------------------------------*/
-void CDECL decBmp_quit (IMGINFO info)
+void CDECL decSvg_quit (IMGINFO info)
 {
-  bmp_image *bmp = (bmp_image *)info->_priv_data;
-	if (bmp)
+  plutovg_surface_t   *surface  = (plutovg_surface_t *)info->_priv_data;
+  plutosvg_document_t *document = (plutosvg_document_t *)info->_priv_more;
+
+  if (surface)  { plutovg_surface_destroy(surface); }
+  if (document) { plutosvg_document_destroy(document); }
+	
+  info->_priv_data = NULL;
+  info->_priv_more = NULL;
+
+  if (info->_priv_load)
   {
-    bmp_finalise(bmp);
-		ldg_Free (bmp);
-
-    info->_priv_data = NULL;
-    if (info->_priv_load)
-    {
-      ldg_Free(info->_priv_load);
-      info->_priv_load = NULL;
-      info->_priv_size = 0;
-    }
-	}
+    ldg_Free(info->_priv_load);
+    info->_priv_load = NULL;
+    info->_priv_size = 0;
+  }
 }
 
 /*----------------------------------------------------------------------------*/
 
-const char* CDECL decBmp_info()
+const char* CDECL decSvg_info()
 {
-  return "NetSurf's BMP decoder (based on libnsbmp 0.1.7)";
+  return "PlutoSVG decoder (based on libplutosvg " PLUTOSVG_VERSION_STRING " and libplutovg " PLUTOVG_VERSION_STRING ")";
 }
 
 /*----------------------------------------------------------------------------*/
 
-void CDECL decBmp_setFastImage(BOOL set_FastImages)
+void CDECL decSvg_setFastImage(BOOL set_FastImages)
 {
   local_FastImages = set_FastImages;
 }
@@ -218,9 +180,9 @@ void CDECL decBmp_setFastImage(BOOL set_FastImages)
 
 PROC LibFunc[] =
 {
-  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc);\n", decBmp_start},
-  {"hw_dec_info", "const char * hw_dec_info();\n", decBmp_info},
-  {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decBmp_setFastImage},
+  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc);\n", decSvg_start},
+  {"hw_dec_info", "const char * hw_dec_info();\n", decSvg_info},
+  {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decSvg_setFastImage},
 };
 
 LDGLIB LibLdg[] = { { 0x0001, 3, LibFunc,  "BMP decoder for HighWire", 1 } };

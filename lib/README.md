@@ -11,6 +11,7 @@ here: the toolchain already has it.
 | `libpng/` | 1.8.0.git | <https://github.com/pnggroup/libpng> and <https://github.com/RajahLone/libpng.a> | libpng, in `LICENSE` |
 | `jpeg/` | 10.0.0 | <https://ijg.org/> and <https://github.com/RajahLone/libjpeg.a>  | IJG, under LEGAL ISSUES in `README` |
 | `libnsbmp/` | 0.1.7 | <http://www.netsurf-browser.org/> and <https://github.com/RajahLone/libnsbmp.a>  | MIT, in `COPYING` |
+| `plutosvg/` | 0.0.8 | <https://github.com/sammycage/plutosvg> and <https://github.com/RajahLone/libplutosvg.a>  | MIT, in `LICENSE` |
 | `ldg/` | 2.35 | <https://sourceforge.net/projects/ldg/files/> | Lesser GPL in `COPYRIGHT` |
 | `mdebtls/` | 3.6.7 | <https://github.com/Mbed-TLS/mbedtls> | Apache 2.O in `LICENSE` |
 

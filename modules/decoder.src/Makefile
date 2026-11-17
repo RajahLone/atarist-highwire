@@ -20,7 +20,7 @@ CPU = 68000
 DEFS =
 
 OPTFLAGS = -funsigned-char \
-       -fomit-frame-pointer -O2 -fstrength-reduce -DICO_DBG -DXBM_DBG -DBMP_DBG
+       -fomit-frame-pointer -O2 -fstrength-reduce -DICO_DBG -DXBM_DBG -DBMP_DBG -DSVG_DBG
 
 ifeq ($(CPU),5475)
 	OPTS = $(CPU:%=-mcpu=%) $(OPTFLAGS)
@@ -124,6 +124,11 @@ img_bmp: ; $(MAKE) TARGET=imgd-bmp.ldg CFILES=img_bmp.c \
                    INCLUDE="-I../../lib/libnsbmp/include -I../../lib/ldg/include -I../../lib/libcmini/include" \
                    LDFLAGS="-s -nostdlib $(CMINI)/crt0.o" \
                    LIBS="-L$(CMINI)$(CPUDIR) -L../../lib/libnsbmp$(CPUDIR) -L../../lib/ldg/lib.gcc$(CPUDIR) -lnsbmp -lm -lldg -lcmini -lgcc -lcmini"
+
+img_svg: ; $(MAKE) TARGET=imgd-svg.ldg CFILES=img_svg.c \
+                   INCLUDE="-I../../lib/plutosvg/include -I../../lib/ldg/include -I../../lib/libcmini/include" \
+                   LDFLAGS="-s -nostdlib $(CMINI)/crt0.o" \
+                   LIBS="-L$(CMINI)$(CPUDIR) -L../../lib/plutosvg$(CPUDIR) -L../../lib/ldg/lib.gcc$(CPUDIR) -lplutosvg -lplutovg -lm -lldg -lcmini -lgcc -lcmini"
 
 clean:
 	$(RM) $(OBJS)

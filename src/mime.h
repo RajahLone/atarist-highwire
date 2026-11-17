@@ -21,6 +21,9 @@ typedef enum {   /* Basic MIME types from RFC2045/2046 by the
 		MIME_IMG_X_XPM,   /* image/x-xpixmap "*.xpm"        */
 		MIME_IMG_X_ICON,  /* image/x-icon    "*.ico"        */
 		MIME_IMG_X_BMP,   /* image/x-bmp     "*.bmp"        */
+		MIME_IMG_SVG,     /* image/svg       "*.svg"        */
+		MIME_IMG_SVG_X1,  /* image/svg+xml   "*.svg"        */
+		MIME_IMG_SVG_X2,  /* image/svg-xml   "*.svg"        */
 /*		MIME_IMG_X_XIMG,*//* image/x-ximg    "*.img"        */
 
 	MIME_AUDIO = 0x3000,
