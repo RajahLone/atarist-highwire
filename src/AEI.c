@@ -159,8 +159,8 @@ static BOOL
 page_load(void)
 {
 	char fsel_file[HW_PATH_MAX] = "";
-	const char * label = "HighWire: Open HTML or text";
-	const char * patt  = (sys_XAAES() ? "*.[HJPT]*" : NULL);
+	const char * label = "HighWire: Open HTML, text, image";
+	const char * patt  = (sys_XAAES() ? "*.*" : NULL);
 	if (!file_selector (label, patt, NULL, fsel_file,sizeof(fsel_file))) {
 		return FALSE;
 	} else {
