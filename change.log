@@ -3,6 +3,8 @@ some ideas to work on:
 - HYP documentation (at least for keys shortcuts).
 - remove PureC and LatticeC parts?
 - favicon.ico for bookmarks?
+- crash noted on my MegaST-68k/MagiC: crash just after
+  bookmark files are created with blank cfg file.
 - crash with bullet <ul><li/></ul> and Life speedo font.
 - animated gif (and png?) like in CAB, that can be disabled?
 - if animation display is achieved, next on webp?

@@ -6,48 +6,40 @@ HighWire runs on any ST compatible machine, no GDOS required, and renders using 
 
 If your ST isn't already online, take a look at [MD/Net](https://downloads.neilrackett.com/md-net), which has everything you need to get up and running.
 
-[![Build Status](https://github.com/neilrackett/atarist-highwire/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/neilrackett/atarist-highwire/actions)
-
 ## Installing
 
-- Download the latest snapshot below
-- Extract the zip file to your hard disk
-- Run `HIGHWIRE.PRG`
+- Download the correct release: -68k is pure 68000 without FPU, -020 is for 68020 with FPU to 68060 with FPU (including 68080), -v4e is for ColdFire/FireBee machine.
+- Extract the zip file to your hard disk.
+- Configure `example.cfg/highwire.cfg` and put it besides `highwire.prg`.
+- Run `highwire.prg`.
 
-It arrives set up for a plain ST running STinG: `HIGHWIRE.PRG` is the 68000
-build, and `MODULES\NETWORK.OVL` is STinG. Both are copies, so everything else
-is still in the archive to swap in.
-
-**For a faster machine**, copy the build that suits it over `HIGHWIRE.PRG`:
-
-- `.000` — any 68000: ST, STE, Mega ST/STE _(what you get by default)_
-- `.030` — 68030: Falcon, TT (works with or without an FPU)
-- `.03F` — 68030 with a 68881/2 FPU fitted (same, but faster)
-- `.040` / `.060` — accelerated machines with FPU
-- `.v4e` — ColdFire (FireBee)
-
-**For a different TCP/IP stack**, copy the matching `.OVL` from `MODULES` over
-`MODULES\NETWORK.OVL` — `MINTNET.OVL`, `STIK2.OVL`, `MAGICNET.OVL` or
-`ICONNECT.OVL`.
+The internet stack is automatically detected by reading the cookie jar. Detection can be forced by user's settings in the `highwire.cfg`.
 
 ## Downloads
 
-- [Latest snapshot](https://downloads.neilrackett.com/atarist-highwire/highwire-latest.zip)
-- [Earlier builds](https://downloads.neilrackett.com/atarist-highwire)
+- [This fork builds](https://ptonthat.fr/files/highwire/)
+- [Official builds](https://downloads.neilrackett.com/atarist-highwire)
 - [Snapshots before August 2026](https://atari.joska.no/snapshots/highwire/)
 
 ## Building
 
-With [atarist-toolkit-docker](https://github.com/sidecartridge/atarist-toolkit-docker)
+With [m68k-atari-mint-gcc](http://vincent.riviere.free.fr/soft/m68k-atari-mint/)
+and [GEMLib](http://vincent.riviere.free.fr/soft/m68k-atari-mint/archives/gemlib-Git-20230112-bin-cygwin-20230114.tar.bz2) 
+and [CFLib](http://vincent.riviere.free.fr/soft/m68k-atari-mint/archives/cflib-Git-20221026-bin-cygwin-20230115.tar.bz2)
+and [fdlibm](https://tho-otto.m68k.eu/download/mint/fdlibm-20240425-mint-dev.tar.xz)
 installed:
 
 ```
-stcmd make
+make all
 ```
 
-This produces the 68000 build, `dist/highwire.prg`. `stcmd make dist` builds
-every CPU variant and the release zip, exactly as the snapshots are built.
-[docs/COMPILIN.G](docs/COMPILIN.G) lists the other targets.
+Other .a and .h libraries are provided in the local lib/ folder.
+
+Modules can be built separatly. For exemple, run from the root directory:
+
+```
+make -C modules/decoder.src CPU=68000 img_gif
+```
 
 ## License
 
@@ -57,9 +49,9 @@ HighWire is based, in part, on the Project HighWire source released by Robert
 Goldsmith, and has been altered and extended by many contributors since. Code
 from before the move to the GPL is also available under its original
 zlib-style licence, which is kept, unaltered, in
-[docs/HIGHWIRE.DOC](docs/HIGHWIRE.DOC).
+[docs/highwire.txt](docs/highwire.txt).
 
 The vendored [`lib/`](lib/) libraries keep their own licences: giflib is MIT,
-libpng and libjpeg have their own permissive licences, and all are compatible.
-This software is based in part on the work of the Independent JPEG Group. The
-third-party headers under `modules/network.src/include` keep their own terms.
+libpng, libjpeg and others have their own permissive licences, and all are compatible.
+This software is based in part on the work of the Independent JPEG Group. 
+Licenses are grouped in `doc/licenses/` folder's releases.
