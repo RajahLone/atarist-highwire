@@ -60,7 +60,7 @@ BOOL local_FastImages = FALSE;
 
 void (*local_errprintf)(const char *s, ...);
 
-BOOL CDECL decIco_start (IMGINFO info, void * errfunc);
+BOOL CDECL decIco_start (IMGINFO info, void * errfunc, short *gl);
 BOOL CDECL decIco_rd_4 (IMGINFO info, CHAR * buffer);
 BOOL CDECL decIco_rd_8 (IMGINFO info, CHAR * buffer);
 void CDECL decIco_quit (IMGINFO info);
@@ -106,7 +106,7 @@ static long mread_long (void)
 }
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decIco_start (IMGINFO info, void * errfunc)
+BOOL CDECL decIco_start (IMGINFO info, void * errfunc, short *gl)
 {
 	ICONDIRENTRY * found   = NULL;
 	ICONDIRENTRY * entries = NULL;
@@ -445,7 +445,7 @@ void CDECL decIco_setFastImage(BOOL set_FastImages)
 
 PROC LibFunc[] =
 {
-  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc);\n", decIco_start},
+  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc, short *gl);\n", decIco_start},
   {"hw_dec_info", "const char * hw_dec_info();\n", decIco_info},
   {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decIco_setFastImage},
 };

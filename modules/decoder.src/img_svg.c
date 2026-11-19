@@ -3,19 +3,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <mt_gem.h>
 #include <ldg.h>
 #include <ctype.h>
 
 #include "../../src/global.h"
 #include "../../src/img-dcdr.h"
 
+#include <math.h>
 #include <plutosvg.h>
 
 BOOL local_FastImages = FALSE;
 
 void (*local_errprintf)(const char *s, ...);
 
-BOOL CDECL decSvg_start (IMGINFO info, void * errfunc);
+BOOL CDECL decSvg_start (IMGINFO info, void * errfunc, short *gl);
 void CDECL blend_row (IMGINFO info, CHAR * row);
 BOOL CDECL decSvg_read (IMGINFO info, CHAR * buffer);
 void CDECL decSvg_quit (IMGINFO info);
@@ -25,13 +27,19 @@ void CDECL decSvg_setFastImage(BOOL set_FastImages);
 static UWORD svg_line_read;
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decSvg_start (IMGINFO info, void * errfunc)
+BOOL CDECL decSvg_start (IMGINFO info, void * errfunc, short *gl)
 {
 	BOOL                 res      = TRUE;
   plutosvg_document_t* document = NULL;
   plutovg_surface_t*   surface  = NULL;
   const char*          id       = NULL;
 
+  float docu_w, docu_h;
+  short desk_x, desk_y, desk_w, desk_h;
+  int surf_w = -1;
+  int surf_h = -1;
+  BOOL resized = FALSE;
+  
   svg_line_read  = 0;
 
   local_errprintf = errfunc;
@@ -40,16 +48,52 @@ BOOL CDECL decSvg_start (IMGINFO info, void * errfunc)
     
   if (document == NULL) { local_errprintf("decSvg_start(): could not instanciate document from datas\n"); res = FALSE; goto cleanup; }
 
+  docu_w = plutosvg_document_get_width(document);
+  docu_h = plutosvg_document_get_height(document);
+
 #ifdef SVG_DBG
-  local_errprintf("svg_document size: %d x %d px\n", (int)plutosvg_document_get_width(document), (int)plutosvg_document_get_height(document));
+  local_errprintf("svg_document size: %d x %d px\n", (int)docu_w, (int)docu_h);
 #endif
 
-  surface = plutosvg_document_render_to_surface(document, id, -1, -1, NULL, NULL, NULL);
+  mt_wind_get(DESKTOP_HANDLE, WF_WORKXYWH, &desk_x, &desk_y, &desk_w, &desk_h, gl);
+
+  if (info->WantW > 0)
+  {
+    surf_w = info->WantW;
+  }
+  else
+  {
+    surf_w = (int)(ceilf(docu_w));
+    
+    if (surf_w > (int)desk_w)
+    {
+      resized = true;
+      surf_w = (int)desk_w;
+      surf_h = (int)(ceilf(surf_w * docu_h / docu_w));
+    }
+  }
+  if (info->WantH > 0)
+  {
+    surf_h = info->WantH;
+  }
+  else
+  {
+    if (surf_h == -1) { surf_h = (int)(ceilf(docu_h)); }
+    
+    if (surf_h > (int)desk_h)
+    {
+      resized = true;
+      surf_h = (int)desk_h;
+      surf_w = (int)(ceilf(surf_h * docu_w / docu_h));
+    }
+  }
+
+  surface = plutosvg_document_render_to_surface(document, id, surf_w, surf_h, NULL, NULL, NULL);
 
   if (surface == NULL) { local_errprintf("decSvg_start(): could not render to surface\n"); res = FALSE; goto cleanup; }
 
 #ifdef SVG_DBG
-  local_errprintf("svg_surface size: %d x %d px\n", plutovg_surface_get_width(surface), plutovg_surface_get_height(surface));
+  local_errprintf("svg_surface size: %d x %d px%s\n", plutovg_surface_get_width(surface), plutovg_surface_get_height(surface), resized ? " (resized)" : "");
 #endif
 
 	info->_priv_data = surface;
@@ -180,7 +224,7 @@ void CDECL decSvg_setFastImage(BOOL set_FastImages)
 
 PROC LibFunc[] =
 {
-  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc);\n", decSvg_start},
+  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc, short *gl);\n", decSvg_start},
   {"hw_dec_info", "const char * hw_dec_info();\n", decSvg_info},
   {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decSvg_setFastImage},
 };

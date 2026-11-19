@@ -56,7 +56,7 @@ typedef struct s_decoder {
 	MIMETYPE           Mime[4];
   char               libname[4];
   LDG __CDECL         * libimg;
-	BOOL __CDECL        (* open) (IMGINFO i, void *errfunc);
+	BOOL __CDECL        (* open) (IMGINFO i, void *errfunc, short *global);
   const char* __CDECL (* info) (void);
   void __CDECL        (* set) (BOOL cfg_val);
 } DECODER;

@@ -23,7 +23,7 @@ typedef struct s_xmap {
 
 void (*local_errprintf)(const char *s, ...);
 
-BOOL CDECL decXbm_start (IMGINFO info, void * errfunc);
+BOOL CDECL decXbm_start (IMGINFO info, void * errfunc, short *gl);
 BOOL CDECL decXbm_r_bit (IMGINFO info, CHAR * buffer);
 BOOL CDECL decXbm_r_pix (IMGINFO info, CHAR * buffer);
 void  CDECL decXbm_quit (IMGINFO info);
@@ -146,7 +146,7 @@ static BOOL xmap_get_color(XMAP xmap, char *s, char *i, char *val)
 }
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decXbm_start (IMGINFO info, void * errfunc)
+BOOL CDECL decXbm_start (IMGINFO info, void * errfunc, short *gl)
 {
 	WORD   depth  = 1;
 	WORD   transp = -1;
@@ -412,7 +412,7 @@ void CDECL decXbm_dummy(void) { }
 
 PROC LibFunc[] =
 {
-  {"hw_dec_open", "BOOL hw_dec_open(IMGINFO info);\n", decXbm_start},
+  {"hw_dec_open", "BOOL hw_dec_open(IMGINFO info, void * errfunc, short *gl);\n", decXbm_start},
   {"hw_dec_info", "const char * hw_dec_info();\n", decXbm_info},
   {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decXbm_dummy},
 };

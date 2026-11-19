@@ -25,7 +25,7 @@ void (*local_errprintf)(const char *s, ...);
 static void _jpeg_errmsg (j_common_ptr cinfo, int msg_level);
 static void _jpeg_errjmp (j_common_ptr cinfo);
 
-BOOL CDECL decJpg_start (IMGINFO info, void * errfunc);
+BOOL CDECL decJpg_start (IMGINFO info, void * errfunc, short *gl);
 BOOL CDECL decJpg_read (IMGINFO info, CHAR * buffer);
 void CDECL decJpg_quit (IMGINFO info);
 const char* CDECL decJpg_info(void);
@@ -53,7 +53,7 @@ static void _jpeg_errjmp (j_common_ptr cinfo)
 }
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decJpg_start (IMGINFO info, void * errfunc)
+BOOL CDECL decJpg_start (IMGINFO info, void * errfunc, short *gl)
 {
 	jmp_buf escape;
 	
@@ -204,7 +204,7 @@ void CDECL decJpg_dummy(void) { }
 
 PROC LibFunc[] =
 {
-  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc);\n", decJpg_start},
+  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc, short *gl);\n", decJpg_start},
   {"hw_dec_info", "const char * hw_dec_info();\n", decJpg_info},
   {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decJpg_dummy},
 };

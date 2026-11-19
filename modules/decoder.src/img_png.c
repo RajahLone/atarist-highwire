@@ -20,7 +20,7 @@ static void pngldg_read(png_struct *png_ptr, png_bytep data, png_size_t count);
 void *pngldg_malloc(png_struct *png_ptr, png_alloc_size_t size);
 void pngldg_free(png_struct *png_ptr, void *ptr);
 
-BOOL CDECL decPng_start (IMGINFO info, void * errfunc);
+BOOL CDECL decPng_start (IMGINFO info, void * errfunc, short *gl);
 void CDECL blend_row (IMGINFO info, CHAR * row);
 BOOL CDECL decPng_read (IMGINFO info, CHAR * buffer);
 BOOL CDECL decPng_readi (IMGINFO info, CHAR * buffer);
@@ -61,7 +61,7 @@ void *pngldg_malloc(png_struct *png_ptr, png_alloc_size_t size) { return ldg_Mal
 void pngldg_free(png_struct *png_ptr, void *ptr) { ldg_Free(ptr); }
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decPng_start (IMGINFO info, void * errfunc)
+BOOL CDECL decPng_start (IMGINFO info, void * errfunc, short *gl)
 {
 	png_structp png_ptr;
 	png_infop   info_ptr = NULL;
@@ -326,7 +326,7 @@ void CDECL decPng_setFastImage(BOOL set_FastImages)
 
 PROC LibFunc[] =
 {
-  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc);\n", decPng_start},
+  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc, short *gl);\n", decPng_start},
   {"hw_dec_info", "const char * hw_dec_info();\n", decPng_info},
   {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decPng_setFastImage},
 };

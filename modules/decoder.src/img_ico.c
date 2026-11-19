@@ -26,7 +26,7 @@ static void *bitmap_create(int width, int height, unsigned int state);
 static unsigned char *bitmap_get_buffer(void *bitmap);
 static void bitmap_destroy(void *bitmap);
 
-BOOL CDECL decIco_start (IMGINFO info, void * errfunc);
+BOOL CDECL decIco_start (IMGINFO info, void * errfunc, short *gl);
 void CDECL blend_row (IMGINFO info, CHAR * row);
 BOOL CDECL decIco_read (IMGINFO info, CHAR * buffer);
 void CDECL decIco_quit (IMGINFO info);
@@ -62,7 +62,7 @@ static bmp_bitmap_callback_vt bitmap_callbacks = { bitmap_create, bitmap_destroy
 static UWORD bmp_line_read;
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decIco_start (IMGINFO info, void * errfunc)
+BOOL CDECL decIco_start (IMGINFO info, void * errfunc, short *gl)
 {
 	BOOL       res  = TRUE;
   bmp_result code = BMP_OK;
@@ -228,7 +228,7 @@ void CDECL decIco_setFastImage(BOOL set_FastImages)
 
 PROC LibFunc[] =
 {
-  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc);\n", decIco_start},
+  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc, short *gl);\n", decIco_start},
   {"hw_dec_info", "const char * hw_dec_info();\n", decIco_info},
   {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decIco_setFastImage},
 };

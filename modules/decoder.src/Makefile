@@ -128,7 +128,7 @@ img_bmp: ; $(MAKE) TARGET=imgd-bmp.ldg CFILES=img_bmp.c \
 img_svg: ; $(MAKE) TARGET=imgd-svg.ldg CFILES=img_svg.c \
                    INCLUDE="-I../../lib/plutosvg/include -I../../lib/ldg/include -I../../lib/libcmini/include" \
                    LDFLAGS="-s -nostdlib $(CMINI)/crt0.o" \
-                   LIBS="-L$(CMINI)$(CPUDIR) -L../../lib/plutosvg$(CPUDIR) -L../../lib/ldg/lib.gcc$(CPUDIR) -lplutosvg -lplutovg -lm -lldg -lcmini -lgcc -lcmini"
+                   LIBS="-L$(CMINI)$(CPUDIR) -L../../lib/plutosvg$(CPUDIR) -L../../lib/ldg/lib.gcc$(CPUDIR) -lplutosvg -lplutovg -lm -lgem -lldg -lcmini -lgcc -lcmini"
 
 clean:
 	$(RM) $(OBJS)

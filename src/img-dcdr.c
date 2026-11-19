@@ -72,7 +72,7 @@ IMGINFO get_decoder (const char * file, UWORD want_w, UWORD want_h)
             }
 
             found->open = ldg_find("hw_dec_open", found->libimg);
-            if (found->open) { if ((*found->open)(info, &errprintf)) { decoder = found; } }
+            if (found->open) { if ((*found->open)(info, &errprintf, aes_global)) { decoder = found; } }
           }
 					break;
 				}
@@ -102,7 +102,7 @@ IMGINFO get_decoder (const char * file, UWORD want_w, UWORD want_h)
             }
 
             decoder->open = ldg_find("hw_dec_open", decoder->libimg);
-            if (*decoder->open) { if ((*decoder->open)(info, &errprintf)) { break; } }
+            if (*decoder->open) { if ((*decoder->open)(info, &errprintf, aes_global)) { break; } }
           }
         }
 				decoder = decoder->Next;

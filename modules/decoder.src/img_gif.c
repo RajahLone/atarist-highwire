@@ -17,7 +17,7 @@
 
 void (*local_errprintf)(const char *s, ...);
 
-BOOL CDECL decGif_start (IMGINFO info, void * errfunc);
+BOOL CDECL decGif_start (IMGINFO info, void * errfunc, short *gl);
 BOOL CDECL decGif_read (IMGINFO info, CHAR * buffer);
 void CDECL decGif_quit (IMGINFO info);
 const char* CDECL decGif_info(void);
@@ -68,7 +68,7 @@ static int gifldg_read(GifFileType* gif_ptr, GifByteType* data, int count)
 }
 
 /*----------------------------------------------------------------------------*/
-BOOL CDECL decGif_start (IMGINFO info, void * errfunc)
+BOOL CDECL decGif_start (IMGINFO info, void * errfunc, short *gl)
 {
 	short interlace = 0;
 	short transpar  = -1;
@@ -225,7 +225,7 @@ void decGif_dummy(void) { }
 
 PROC LibFunc[] =
 {
-  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info);\n", decGif_start},
+  {"hw_dec_open", "BOOL hw_dec_start(IMGINFO info, void * errfunc, short *gl);\n", decGif_start},
   {"hw_dec_info", "const char * hw_dec_info();\n", decGif_info},
   {"hw_set_fast", "void hw_set_fast(BOOL set_FastImages);\n", decGif_dummy},
 };
