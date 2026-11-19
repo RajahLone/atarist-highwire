@@ -8,7 +8,10 @@ If your ST isn't already online, take a look at [MD/Net](https://downloads.neilr
 
 ## Installing
 
-- Download the correct release: -68k is pure 68000 without FPU, -020 is for 68020 with FPU to 68060 with FPU (including 68080), -v4e is for ColdFire/FireBee machine.
+- Download the correct release: 
+   - -68k is pure 68000 without FPU, 
+   - -020 is for 68020 with FPU to 68060 with FPU (including 68080), 
+   - -v4e is for ColdFire/FireBee machine.
 - Extract the zip file to your hard disk.
 - Configure `example.cfg/highwire.cfg` and put it besides `highwire.prg`.
 - Run `highwire.prg`.
@@ -23,10 +26,10 @@ The internet stack is automatically detected by reading the cookie jar. Detectio
 
 ## Building
 
-With [m68k-atari-mint-gcc](http://vincent.riviere.free.fr/soft/m68k-atari-mint/)
-and [GEMLib](http://vincent.riviere.free.fr/soft/m68k-atari-mint/archives/gemlib-Git-20230112-bin-cygwin-20230114.tar.bz2) 
-and [CFLib](http://vincent.riviere.free.fr/soft/m68k-atari-mint/archives/cflib-Git-20221026-bin-cygwin-20230115.tar.bz2)
-and [fdlibm](https://tho-otto.m68k.eu/download/mint/fdlibm-20240425-mint-dev.tar.xz)
+Use [m68k-atari-mint-gcc](http://vincent.riviere.free.fr/soft/m68k-atari-mint/) (12.4+)
+with [GEMLib](https://atari.joska.no/snapshots/gemlib/gemlib-mint-latest.tar.bz2) (Atari GEM bindings)
+and [CFLib](https://atari.joska.no/snapshots/cflib/cflib-mint-latest.tar.bz2) (Christian Felsch's GEM utility library)
+and [fdlibm](https://tho-otto.m68k.eu/download/mint/fdlibm-20240425-mint-dev.tar.xz) (math library with float functions)
 installed:
 
 ```

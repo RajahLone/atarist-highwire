@@ -1,11 +1,11 @@
 some ideas to work on:
-- debug the SVG decoder, resize with WantW+WantH.
-- HYP documentation (at least for keys shortcuts).
-- remove PureC and LatticeC parts?
-- favicon.ico for bookmarks?
+- debug the SVG decoder (sometimes, crash with dragon.svg).
 - crash noted on my MegaST-68k/MagiC: crash just after
   bookmark files are created with blank cfg file.
 - crash with bullet <ul><li/></ul> and Life speedo font.
+- HYP documentation (at least for keys shortcuts).
+- remove PureC and LatticeC parts?
+- favicon.ico for bookmarks?
 - animated gif (and png?) like in CAB, that can be disabled?
 - if animation display is achieved, next on webp?
 - study HTTP and CSS NetSurf's libraries (possible port?).
@@ -13,11 +13,13 @@ some ideas to work on:
 
 Acheived for next release:
 
-  - SVG decoder added, using PlutoVG and PlutoSVG libraries.
+  - SVG decoder added, using PlutoVG and PlutoSVG libraries,
+    (if unique file display, resized if bigger than screen).
   - HighWire's' core uses libcmini instead of MiNTlib, reducing
     drastically program size.
   - ICO decoder updated and using NetSurf's libnsbmp.
   - BMP decoder added thanks to NetSurf's libnsbmp.
+  - about: shows libcmini version and date.
 
 Changes 0.4.9 (fork-20261110, unofficial, nicknamed "HughWire")
 
