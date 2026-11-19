@@ -138,7 +138,11 @@ about_highwire (TEXTBUFF current, WORD link_color)
 		sprintf (buf, "MiNTlib:\005\022%i.%02i.%i\020\005" __MINTLIB_BETATAG__ "\r", __MINTLIB_MAJOR__, __MINTLIB_MINOR__, __MINTLIB_REVISION__);
     *(++w) = render_text (current, buf);
     tab    = max (tab, (*w)->word_width);
-	#endif
+	#else
+		sprintf (buf, "libcmini:\005\022%i.%02i.%i\020\005\r", 0, 55, 20261117);
+    *(++w) = render_text (current, buf);
+    tab    = max (tab, (*w)->word_width);
+  #endif
 
   #ifdef __GEMLIB_MAJOR__
 	  sprintf (buf, "GEMlib:\005\022%i.%02i.%i\020\005" __GEMLIB_BETATAG__ "\r", __GEMLIB_MAJOR__, __GEMLIB_MINOR__, __GEMLIB_REVISION__);
