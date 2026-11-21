@@ -78,7 +78,7 @@ DEPENDENCIES = $(addprefix $(DEPDIR)/, $(patsubst %.c,%.P,$(CFILES)))
 
 
 $(TARGET): $(OBJS)
-	$(LD) -o $@ $(CFLAGS) -Wl,-stack,128k $(LDFLAGS) $(OBJS) $(LIBS)
+	$(LD) -o $@ $(CFLAGS) -Wl,-stack,128k -Wl,--mprg-flags=0x17 $(LDFLAGS) $(OBJS) $(LIBS)
 	$(STRIP) $(TARGET)
 	rm $(OBJDIR)/*.o
 

@@ -62,6 +62,7 @@ BOOL CDECL decJpg_start (IMGINFO info, void * errfunc, short *gl)
 	int header = 0;
 	
   local_errprintf = errfunc;
+  (void)gl;
  
   if ((jpeg = ldg_Calloc (1, sizeof(struct jpeg_decompress_struct))) == NULL ||
       (jerr = ldg_Calloc (1, sizeof(struct jpeg_error_mgr)))         == NULL)

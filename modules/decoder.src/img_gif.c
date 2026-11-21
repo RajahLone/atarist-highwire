@@ -76,7 +76,8 @@ BOOL CDECL decGif_start (IMGINFO info, void * errfunc, short *gl)
 	short img_h     = 0;
 	
   local_errprintf = errfunc;
- 
+  (void)gl;
+
 	ColorMapObject * map = NULL;
   
   gif_mf.data = info->_priv_load;

@@ -69,6 +69,7 @@ BOOL CDECL decBmp_start (IMGINFO info, void * errfunc, short *gl)
   bmp_line_read = 0;
   
   local_errprintf = errfunc;
+  (void)gl;
  
   struct bmp_image *bmp = (struct bmp_image *)ldg_Malloc (sizeof(struct bmp_image));
  

@@ -73,7 +73,7 @@ OBJS_MAGIC := $(shell mkdir -p $(OBJDIR) > /dev/null 2>&1 || :)
 DEPENDENCIES = $(addprefix $(DEPDIR)/, $(patsubst %.c,%.P,$(CFILES)))
 
 $(TARGET): $(OBJS)
-	$(LD) $(LDFLAGS) $(OBJS) -o $@ $(CFLAGS) -Wl,-stack,64k $(LIBS)
+	$(LD) $(LDFLAGS) $(OBJS) -o $@ $(CFLAGS) -Wl,-stack,64k -Wl,--mprg-flags=0x17 $(LIBS)
 	$(STRIP) $(TARGET)
 	rm $(OBJDIR)/*.o
 

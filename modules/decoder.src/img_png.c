@@ -74,6 +74,7 @@ BOOL CDECL decPng_start (IMGINFO info, void * errfunc, short *gl)
 	WORD            num_alpha = 0;
 
   local_errprintf = errfunc;
+  (void)gl;
 
   png_mf.data = info->_priv_load;
   png_mf.size = info->_priv_size;

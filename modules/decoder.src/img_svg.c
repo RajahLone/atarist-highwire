@@ -45,14 +45,14 @@ BOOL CDECL decSvg_start (IMGINFO info, void * errfunc, short *gl)
   local_errprintf = errfunc;
  
   document = plutosvg_document_load_from_data((const char *)info->_priv_load, info->_priv_size, -1, -1, NULL, NULL);
-    
+
   if (document == NULL) { local_errprintf("decSvg_start(): could not instanciate document from datas\n"); res = FALSE; goto cleanup; }
 
   docu_w = plutosvg_document_get_width(document);
   docu_h = plutosvg_document_get_height(document);
 
 #ifdef SVG_DBG
-  local_errprintf("svg_document size: %d x %d px\n", (int)docu_w, (int)docu_h);
+  local_errprintf("svg_document size: %d x %d px\n", (int)(ceilf(docu_w)), (int)(ceilf(docu_h)));
 #endif
 
   mt_wind_get(DESKTOP_HANDLE, WF_WORKXYWH, &desk_x, &desk_y, &desk_w, &desk_h, gl);
@@ -65,10 +65,10 @@ BOOL CDECL decSvg_start (IMGINFO info, void * errfunc, short *gl)
   {
     surf_w = (int)(ceilf(docu_w));
     
-    if (surf_w > (int)desk_w)
+    if (surf_w > (int)(desk_w + desk_x))
     {
       resized = true;
-      surf_w = (int)desk_w;
+      surf_w = (int)(desk_w + desk_x);
       surf_h = (int)(ceilf(surf_w * docu_h / docu_w));
     }
   }
@@ -80,10 +80,10 @@ BOOL CDECL decSvg_start (IMGINFO info, void * errfunc, short *gl)
   {
     if (surf_h == -1) { surf_h = (int)(ceilf(docu_h)); }
     
-    if (surf_h > (int)desk_h)
+    if (surf_h > (int)(desk_h + desk_y))
     {
       resized = true;
-      surf_h = (int)desk_h;
+      surf_h = (int)(desk_h + desk_y);
       surf_w = (int)(ceilf(surf_h * docu_w / docu_h));
     }
   }
@@ -94,6 +94,8 @@ BOOL CDECL decSvg_start (IMGINFO info, void * errfunc, short *gl)
 
 #ifdef SVG_DBG
   local_errprintf("svg_surface size: %d x %d px%s\n", plutovg_surface_get_width(surface), plutovg_surface_get_height(surface), resized ? " (resized)" : "");
+#else
+  (void)resized;
 #endif
 
 	info->_priv_data = surface;

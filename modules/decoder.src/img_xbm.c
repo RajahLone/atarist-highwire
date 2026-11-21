@@ -154,6 +154,7 @@ BOOL CDECL decXbm_start (IMGINFO info, void * errfunc, short *gl)
 	char * p;
   
   local_errprintf = errfunc;
+  (void)gl;
 
   xmp_mf.data = info->_priv_load;
   xmp_mf.size = info->_priv_size + 1; // with terminal nullbyte

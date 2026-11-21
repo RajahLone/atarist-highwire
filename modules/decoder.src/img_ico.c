@@ -70,6 +70,7 @@ BOOL CDECL decIco_start (IMGINFO info, void * errfunc, short *gl)
   bmp_line_read = 0;
   
   local_errprintf = errfunc;
+  (void)gl;
  
   struct ico_collection *ico = (struct ico_collection *)ldg_Malloc (sizeof(struct ico_collection));
   struct bmp_image      *bmp = (struct bmp_image      *)ldg_Malloc (sizeof(struct bmp_image));
