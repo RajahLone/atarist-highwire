@@ -125,7 +125,7 @@ jar_load (void)
 			{ /* host/domain */
 			
 				char host[300] = "", domain[300] = "";
-				int n = sscanf (buff, "H:%hu:%256[^:]:%256[^:]:",
+				int n = sscanf (buff, "H:%hi:%256[^:]:%256[^:]:",
 				                &num, host, domain);
 				if (n >= 2) {
 					ULONG        flags    = 0;
@@ -157,7 +157,7 @@ jar_load (void)
 				long   expires;
 				UWORD  nam_len, val_len, pth_len;
 				if (!fgets (buff, (int)sizeof(buff), file)
-				    || sscanf (buff, "C:%lX:%hu:%hu:%hu:",
+				    || sscanf (buff, "C:%lX:%hi:%hi:%hi:",
 				               &expires, &nam_len, &val_len, &pth_len) != 4) {
 					break;
 				} else if (skip || expires < now) {
@@ -172,12 +172,12 @@ jar_load (void)
 				} else {
 					COOKIE cookie = create_cookie (nam_len, val_len, pth_len);
 					if (cookie) {
-						sprintf (buff, "N:%%%hus\n", nam_len);
+						sprintf (buff, "N:%%%his\n", nam_len);
 						fscanf  (file, buff, cookie->NameStr);
-						sprintf (buff, "V:%%%hus\n", val_len);
+						sprintf (buff, "V:%%%his\n", val_len);
 						fscanf  (file, buff, cookie->ValueStr);
 						if (pth_len) {
-							sprintf (buff, "P:%%%hus\n", pth_len);
+							sprintf (buff, "P:%%%his\n", pth_len);
 							fscanf  (file, buff, cookie->PathStr);
 						}
 						cookie->Expires = expires;

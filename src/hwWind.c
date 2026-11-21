@@ -257,7 +257,7 @@ wgeo_write (const GRECT * rect, UWORD mask, char * buff)
 	if ((mask & GEO_USR_WH) || ((mask & GEO_CFG_WH) && (mask & GEO_USR_XY))) {
 		WORD w = (WORD)(((long)rect->g_w * 0x7FFF) / desk_area.g_w);
 		WORD h = (WORD)(((long)rect->g_h * 0x7FFF) / desk_area.g_h);
-		sprintf (p, "%04hXx%04hX", w, h);
+		sprintf (p, "%04Xx%04X", w, h);
 		p = strchr (p, '\0');
 	}
 	if ((mask & GEO_USR_XY) || ((mask & GEO_CFG_XY) && (mask & GEO_USR_WH))) {
@@ -265,7 +265,7 @@ wgeo_write (const GRECT * rect, UWORD mask, char * buff)
 		         / (desk_area.g_w - desk_area.g_x));
 		WORD y = (WORD)(((long)(rect->g_y - desk_area.g_y) * 0x7FFF)
 		         / (desk_area.g_h - desk_area.g_y));
-		sprintf (p, "+%04hX+%04hX", x, y);
+		sprintf (p, "+%04X+%04X", x, y);
 		p = strchr (p, '\0');
 	}
 	return (p > buff);

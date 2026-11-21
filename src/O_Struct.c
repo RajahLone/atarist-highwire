@@ -182,7 +182,7 @@ new_maparea (const char * shape, const char * coords, char * href,
 			area->u.Extent.g_w = area->u.Extent.g_h = 0;
 			while (n--) {
 				int l;
-				sscanf (p, "%hu,%hu,%n", &c->p_x, &c->p_y, &l);
+				sscanf (p, "%hi,%hi,%n", &c->p_x, &c->p_y, &l);
 				if (area->u.Extent.g_x > c->p_x) area->u.Extent.g_x = c->p_x;
 				if (area->u.Extent.g_w < c->p_x) area->u.Extent.g_w = c->p_x;
 				if (area->u.Extent.g_y > c->p_y) area->u.Extent.g_y = c->p_y;

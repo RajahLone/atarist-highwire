@@ -74,7 +74,7 @@ set_entry (short entry, short id)
 	const char * text = (hw_vqt_xfntinfo (vdi_handle, 0x0001, id, 0, &info)
 	                     ? info.font_name : "???");
 	strcpy  (fnt_name[entry]->te_ptext, text);
-	sprintf (fnt_indx[entry], "%hu", id);
+	sprintf (fnt_indx[entry], "%i", id);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -140,7 +140,7 @@ fonts_apply (BOOL final)
 				}
 				if (final && fonts[n][i][j] != saved_font[n][i][j]) {
 					char buff[8];
-					sprintf (buff, "%hu", fonts[n][i][j]);
+					sprintf (buff, "%i", fonts[n][i][j]);
 					save_config (keyword[n][i][j], buff);
 				}
 			}
