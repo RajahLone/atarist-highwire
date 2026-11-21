@@ -149,7 +149,6 @@ main (int argc, char **argv)
 {
 	WORD   info, u;
 	long   gdostype;
-	char * old_bookm = NULL;
 	BOOL   quit      = FALSE;
 
 	if (appl_init() < 0) {
@@ -259,47 +258,7 @@ main (int argc, char **argv)
 #endif
 
 	/* load/create bookmark.htm file */
-	if (read_bookmarks (&old_bookm) && old_bookm) {
-		char * alert = NULL;
-		char * beg   = NULL;
-		char * end   = NULL;
-		if (rsrc_gaddr (R_STRING, BKMOUTDATED, &alert)) {
-			if ((beg = strchr (alert, '"')) != NULL) {
-				end = strchr (++beg, '"');
-			}
-		}
-		if (beg && end) {
-			const char * p = _HIGHWIRE_BOOKMARK_;
-			while (*p && beg < end) {
-				*(beg++) = *(p++);
-			}
-			if (beg < end) {
-				strcpy (beg, end);
-			}
-			if ((beg = strchr (end +1, '"')) != NULL) {
-				end = strchr (++beg, '"');
-			}
-		}
-		if (beg && end) {
-			char *     p = strrchr (old_bookm, '\\');
-			if (!p && (p = strrchr (old_bookm, '/')) == NULL) p = old_bookm;
-			else                                              p++;
-			while (*p && beg < end) {
-				*(beg++) = *(p++);
-			}
-			if (beg < end) {
-				strcpy (beg, end);
-			}
-		
-		} else {
-			hwUi_fatal ("RSC file", "damaged or outdated!");
-			/* we never arrive at this line due to previous exit() */
-		}
-		if (form_alert (1, alert) != 1) {
-			free (old_bookm);
-			old_bookm = NULL;
-		}
-	}
+  read_bookmarks ();
 
 	if (appl_xgetinfo (12, &info, &u, &u, &u) && (info & 8)) {
 /*	if (appl_xgetinfo (AES_MESSAGE, &info, &u, &u, &u) && (info & 8))*/
@@ -332,11 +291,6 @@ main (int argc, char **argv)
 	}
 	if ((!u || !cfg_UptoDate) && !new_hwWind ("", cfg_StartPage, TRUE)) {
 		hwUi_fatal (NULL, "Can't open main window.");
-	}
-	if (old_bookm && pick_bookmarks (old_bookm, progress_bar)) {
-		free (old_bookm);
-		old_bookm = NULL;
-		menu_openbookmarks();
 	}
 	if (cfg_HotlistOpen) {
 		menu_openbookmarks();

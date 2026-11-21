@@ -496,13 +496,11 @@ static const char tmpl_css[] =
 
 /*============================================================================*/
 BOOL
-read_bookmarks (char ** old_file)
+read_bookmarks ()
 {
 	BOOL   ok   = TRUE;
 	FILE * file = NULL;
-	if (old_file) {
-		*old_file = NULL;
-	}
+
 	if ((file = open_bookmarks ("r")) != NULL) { 
 		size_t len = strchr (tmpl_head, '>') - tmpl_head +1;
 		char   buff[1024];
@@ -512,39 +510,6 @@ read_bookmarks (char ** old_file)
 		fclose (file);
 		if (strncmp (buff, tmpl_head, len) == 0) {
 			ok = TRUE; /* version matches */
-		
-		} else {
-			char * bak_file = (bkm_File ? strdup (bkm_File) : NULL);
-			if (bak_file) {
-				const char * bak_name = "book-old.htm";
-				char       * ptr      = strrchr (bak_file, '\\');
-				if (!ptr)    ptr      = strrchr (bak_file, '/');
-				if (ptr) {
-					strcpy (++ptr, bak_name);
-					unlink (bak_file);
-					if (rename (bkm_File, bak_file) == E_OK) {
-						union { const char * c; char * v; } u;
-						u.c = bkm_File;
-						free (u.v);
-						bkm_File = NULL;
-						if ((file = open_bookmarkCss ("r")) != NULL) {
-							fclose (file);
-						}
-						if (bkm_CSS) {
-							unlink (bkm_CSS);
-							u.c = bkm_CSS;
-							free (u.v);
-							bkm_CSS = NULL;
-						}
-					}
-				}
-				if (old_file) {
-					*old_file = bak_file;
-				} else {
-					free (bak_file);
-				}
-			}
-			file = NULL;
 		}
 	}
 	if (!file) {
