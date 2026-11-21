@@ -199,3 +199,18 @@ mime_byString (const char * str, const char ** tail)
 	
 	return type;
 }
+
+/*============================================================================*/
+BOOL is_binary(MIMETYPE m)
+{
+  switch(m)
+  {
+    case MIME_TXT_CSS: case MIME_TXT_HTML: case MIME_TXT_PLAIN:
+    case MIME_IMG_X_XBM: case MIME_IMG_X_XPM: case MIME_IMG_SVG: case MIME_IMG_SVG_X1: case MIME_IMG_SVG_X2:
+    case MIME_TEXT:
+      return FALSE; break;
+    default:
+      return TRUE; break;
+  }
+  return TRUE;
+}

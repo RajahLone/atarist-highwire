@@ -32,20 +32,20 @@ IMGINFO get_decoder (const char * file, UWORD want_w, UWORD want_h)
   {
 		memset (info, 0, offsetof (struct s_img_info, Pixel));
 
-    if (!decoder_load_image(info, file))
+		MIMETYPE mime = mime_byExtension (file, NULL, NULL);
+
+    if (!decoder_load(info, file, is_binary(mime)))
     {
 			free (info);
 			info = NULL;
     }
-  }
- 
-	if (info)
-  {
+
 		DECODER * decoder = NULL;
 		DECODER * found   = NULL;
-		MIMETYPE  mime    = mime_byExtension (file, NULL, NULL);
+
 		info->WantW = want_w;
 		info->WantH = want_h;
+
 		if (MIME_Major(mime) && MIME_Minor(mime)) {
 			found = decoder_chain;
 			while (found) {
@@ -119,14 +119,14 @@ IMGINFO get_decoder (const char * file, UWORD want_w, UWORD want_h)
 }
 
 /*----------------------------------------------------------------------------*/
-void * decoder_load_image(IMGINFO info, const char * image_file)
+void * decoder_load(IMGINFO info, const char * fname, BOOL bin)
 {
-  void *ptr = NULL;
+  unsigned char *ptr = NULL;
 
   info->_priv_load = NULL;
   info->_priv_size = 0;
 
-  FILE *f = fopen(image_file, "rb");
+  FILE *f = fopen(fname, bin ? "rb" : "r");
   if (f)
   {
     size_t len;
@@ -137,10 +137,13 @@ void * decoder_load_image(IMGINFO info, const char * image_file)
     
     if (len > 0)
     {
-      ptr = (unsigned char *)ldg_Calloc(1, (LONG)(len + (size_t)256));
+      ptr = (unsigned char *)ldg_Malloc((LONG)(len + (size_t)32));
 
       if (ptr)
       {
+        unsigned char *clr; clr = ptr; clr += len;
+        memset(clr, 0, 32); // fill end with some nullbytes
+        
         if (fread(ptr, sizeof(CHAR), len, f) == len)
         {
           info->_priv_load = ptr;
@@ -150,7 +153,7 @@ void * decoder_load_image(IMGINFO info, const char * image_file)
         {
           ldg_Free(ptr);
           ptr = NULL;
-          if (logging_is_on) { logprintf(LOG_LMAGENTA, "%s not loaded as expected\n", image_file); }
+          if (logging_is_on) { logprintf(LOG_LMAGENTA, "%s not loaded as expected\n", fname); }
         }
       }
       else { ptr = NULL; }

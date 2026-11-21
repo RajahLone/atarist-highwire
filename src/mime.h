@@ -48,5 +48,6 @@ const char * mime_toExtension (MIMETYPE);
 
 MIMETYPE mime_byString (const char *, const char ** tail);
 
+BOOL is_binary(MIMETYPE m);
 
 #endif /*__MIME_H__*/

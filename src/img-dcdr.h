@@ -63,8 +63,8 @@ typedef struct s_decoder {
 
 extern DECODER *decoder_chain;
 
-IMGINFO get_decoder (const char * file, UWORD want_w, UWORD want_h);
-void *  decoder_load_image(IMGINFO info, const char * image_file);
+IMGINFO get_decoder(const char * file, UWORD want_w, UWORD want_h);
+void *  decoder_load(IMGINFO info, const char * fname, BOOL bin);
 void    decoders_unload(void);
 
 typedef struct s_rasterizer {
