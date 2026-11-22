@@ -312,7 +312,7 @@ fonts_setup (WORD msg[])
 		WORD n;
 		if (!fnt_form) {
 			if (!rsrc_gaddr (R_TREE, FONTSLCT, &fnt_form)) {
-				puts ("font_setup(): rsrc_gaddr() failed!");
+				puts ("fonts_setup(): rsrc_gaddr() failed!");
 				exit(1);
 			}
 			form_center (fnt_form, &n,&n,&n,&n);

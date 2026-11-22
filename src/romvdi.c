@@ -120,7 +120,7 @@ hw_vst_font (WORD handle, FONTBASE base)
 {
 	WORD ret;
   
-  if ((ret = vst_font(handle, base->RealId)) != base->RealId) { return 0; }
+  if ((ret = vst_font(handle, base->RealId)) < 1) { return 0; }
   
   cur_font_format = base->Format;
 
@@ -147,7 +147,7 @@ hw_vqt_xfntinfo (WORD handle, WORD flags, WORD id, WORD fnt_index, XFNT_INFO * i
 	 * happened to be current.  A refusal instead sends it down the fallback
 	 * chain it already has, which ends at the system font.
 	 */
-	if (vst_font (handle, id) != id) {
+	if (vst_font (handle, id)  < 1) {
 		return 0;
 	}
 

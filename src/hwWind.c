@@ -606,16 +606,16 @@ static WORD
 ui_font_setup (WORD * cell_h)
 {
 	WORD dmy;
-	WORD fnt = 1;
+	WORD idx = 0;
 
 	/* sys_font_setup() selects the system font itself */
 	if (inc_xy >= 16
-	    && (fnt = vst_font (vdi_handle, fonts[header_font][0][0])) != 1) {
+	    && (idx = vst_font (vdi_handle, fonts[header_font][0][0])) != 0) {
 		vst_height (vdi_handle, 14, &dmy,&dmy,&dmy, cell_h);
 	} else {
 		*cell_h = sys_font_setup (UI_CELL_H);
 	}
-	return fnt;
+	return idx;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -623,7 +623,7 @@ static void
 draw_infobar (HwWIND This, const GRECT * p_clip, const char * info)
 {
 	GRECT area, clip, rect;
-	WORD x_btn, dmy, fnt, cell, txt_y;
+	WORD x_btn, dmy, idx, cell, txt_y;
 
 	if (This->Base.isIcon || This->shaded) return;
 	
@@ -653,7 +653,7 @@ draw_infobar (HwWIND This, const GRECT * p_clip, const char * info)
 	vsf_interior (vdi_handle, FIS_SOLID);
 	vsf_color    (vdi_handle, info_bgnd & 0x000F);
 	
-	fnt   = ui_font_setup (&cell);
+	idx   = ui_font_setup (&cell);
 	txt_y = VCENTER (area.g_y, area.g_h, cell);
 	vst_color     (vdi_handle, info_fgnd);
 	hw_vst_map_mode  (vdi_handle, MAP_UNICODE);
@@ -701,7 +701,7 @@ draw_infobar (HwWIND This, const GRECT * p_clip, const char * info)
 					p[0].p_y = area.g_y;
 					p[1].p_x = p[1].p_y = This->IbarH -1;
 					draw_border ((GRECT*)p, G_WHITE, G_LBLACK, 1);
-					if (fnt != 1) {
+					if (idx != 0) {
 						cell = sys_font_setup (UI_CELL_H);
 					}
 					vst_alignment (vdi_handle, TA_CENTER, TA_TOP, &dmy, &dmy);
