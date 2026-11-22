@@ -1,5 +1,6 @@
 some ideas to work on:
-- debug the SVG decoder (random crashes in plutosvg parsing).
+- debug the SVG decoder (random crashes under MagiC when
+  parsing with plutosvg).
 - crash with bullet <ul><li/></ul> and Life speedo font.
 - HYP documentation (at least for keys shortcuts).
 - md2html module.
@@ -12,16 +13,18 @@ some ideas to work on:
 
 Acheived for next release:
 
-  - SVG decoder added, using PlutoVG and PlutoSVG libraries,
-    (if unique file display, resized if bigger than screen).
   - HighWire's' core uses libcmini instead of MiNTlib, reducing
     drastically program size.
   - shows libcmini version and date in about: page.
   - ICO decoder updated and using NetSurf's libnsbmp.
   - BMP decoder added thanks to NetSurf's libnsbmp.
+  - SVG decoder added, using PlutoVG and PlutoSVG libraries,
+    If unique file display, resized if bigger than screen.
+    Disabled by default, crashy under MagiC and maybe others.
   - fix: crash at start when creating missing bookmarks and CFG file
          (bug on try to convert from previous format of bookmarks),
          BKMOUTDATED removed from RSC file.
+  - fix: monospaced font id was forgotten when reading settings.
   - fix: modules/*.ldg flags set to 'Global' for MiNT Memory Protection.
 
 Changes 0.4.9 (fork-20261110, unofficial, nicknamed "HughWire")
