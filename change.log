@@ -11,7 +11,7 @@ some ideas to work on:
 - study HTML, CSS, DOM NetSurf's libraries (possible port?).
 
 
-Acheived for next release:
+Changes 0.4.10 (fork-20261122, unofficial "HughWire")
 
   - HighWire's' core uses libcmini instead of MiNTlib, reducing
     drastically program size.

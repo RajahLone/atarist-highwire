@@ -259,19 +259,19 @@ all::
 		$(MAKE) -C modules/decoder.src CPU=68000 img_$$ext; \
 		mv modules/decoder.src/imgd-$$ext.ldg $(DISTDIR_68K)/modules/imgd-$$ext.ldg; \
 	done
-	mv $(DISTDIR_68K)/modules/imgd-$$ext.ldg $(DISTDIR_68K)/modules/imgd-$$ext.ldz
+	mv $(DISTDIR_68K)/modules/imgd-svg.ldg $(DISTDIR_68K)/modules/imgd-svg.ldz
 
 	for ext in $(DECODERS_EXT); do \
 		$(MAKE) -C modules/decoder.src CPU=68020-60 img_$$ext; \
 		mv modules/decoder.src/imgd-$$ext.ldg $(DISTDIR_020)/modules/imgd-$$ext.ldg; \
 	done
-	mv $(DISTDIR_020)/modules/imgd-$$ext.ldg $(DISTDIR_020)/modules/imgd-$$ext.ldz
+	mv $(DISTDIR_020)/modules/imgd-svg.ldg $(DISTDIR_020)/modules/imgd-svg.ldz
 
 	for ext in $(DECODERS_EXT); do \
 		$(MAKE) -C modules/decoder.src CPU=5475 img_$$ext; \
 		mv modules/decoder.src/imgd-$$ext.ldg $(DISTDIR_V4E)/modules/imgd-$$ext.ldg; \
 	done
-	mv $(DISTDIR_V4E)/modules/imgd-$$ext.ldg $(DISTDIR_V4E)/modules/imgd-$$ext.ldz
+	mv $(DISTDIR_V4E)/modules/imgd-svg.ldg $(DISTDIR_V4E)/modules/imgd-svg.ldz
 
 	mkdir -p $(RELEASEDIR)
 	(cwd=`pwd`; cd $(DISTDIR_68K); zip -r "$$cwd"/$(RELEASEDIR)/highwire-`date +%Y%m%d`-68k.zip . -x "*/.DS_Store" -x "__MACOSX")

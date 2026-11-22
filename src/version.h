@@ -1,1 +1,1 @@
-#define _HIGHWIRE_VERSION_ "0.4.9"
+#define _HIGHWIRE_VERSION_ "0.4.10"
